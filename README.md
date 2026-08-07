@@ -52,7 +52,38 @@ Add to your Claude Desktop config (`claude_desktop_config.json`):
 }
 ```
 
-Optional: set a `GITHUB_TOKEN` environment variable to raise GitHub's API rate limit (not required for normal use).
+`claude_desktop_config.json` is at:
+
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+
+### GitHub API rate limit
+
+Unauthenticated GitHub API requests are capped at 60 per hour per IP address, and building one announcement kit makes several of them. A token raises the cap to 5,000 per hour.
+
+Put the token in the `env` block of the config file. **Do not export it in your shell** — Claude Desktop starts MCP servers without inheriting the shell environment, so an exported variable never reaches this server.
+
+```json
+{
+  "mcpServers": {
+    "release-announcer": {
+      "command": "node",
+      "args": ["/absolute/path/to/release-announcer-mcp/dist/index.js"],
+      "env": { "GITHUB_TOKEN": "ghp_..." }
+    }
+  }
+}
+```
+
+The token needs no scopes. This server only reads public repositories.
+
+### Docker (optional)
+
+The repository ships a `Dockerfile` (Node 20 slim, multi-stage build) for running the server in a container. The Claude Desktop setup above does not need it.
+
+```bash
+docker build -t release-announcer-mcp .
+```
 
 ## Usage
 
