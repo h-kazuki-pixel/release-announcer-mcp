@@ -1,5 +1,7 @@
 # release-announcer-mcp
 
+[![CI](https://github.com/h-kazuki-pixel/release-announcer-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/h-kazuki-pixel/release-announcer-mcp/actions/workflows/ci.yml)
+
 An MCP server that turns a GitHub repository into ready-to-review release announcements — and checks that the repo is actually ready to ship.
 
 Point it at any public repo and ask Claude for an "announcement kit". You get drafts for:
