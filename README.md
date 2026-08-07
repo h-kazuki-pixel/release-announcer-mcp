@@ -163,6 +163,38 @@ Claude Desktopの設定ファイル(`claude_desktop_config.json`)に追加:
   }
 }
 ```
+`claude_desktop_config.json` の場所:
+
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+
+### GitHub APIのレート上限
+
+未認証のGitHub APIはIPアドレスあたり1時間60リクエストに制限されており、告知セットを1回作るだけで複数回叩きます。トークンを設定すると1時間5,000リクエストに上がります。
+
+トークンは設定ファイルの `env` ブロックに書いてください。**シェルで `export` しても届きません。** Claude Desktop はMCPサーバーを、シェルの環境変数を引き継がない形で起動するためです。
+
+```json
+{
+  "mcpServers": {
+    "release-announcer": {
+      "command": "node",
+      "args": ["/absolute/path/to/release-announcer-mcp/dist/index.js"],
+      "env": { "GITHUB_TOKEN": "ghp_..." }
+    }
+  }
+}
+```
+
+トークンに権限(スコープ)の付与は不要です。このサーバーは公開リポジトリの読み取りしか行いません。
+
+### Docker(任意)
+
+このリポジトリには `Dockerfile`(Node 20 slim・マルチステージ構成)が同梱されています。コンテナで動かしたい場合に使います。上のClaude Desktopの手順では不要です。
+
+```bash
+docker build -t release-announcer-mcp .
+```
 
 ## 使い方
 
